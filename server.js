@@ -26,7 +26,7 @@ app.post('/api/analyze', (req, res) => {
     });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Send a POST request to /api/analyze to test it!`);
