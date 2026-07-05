@@ -39,7 +39,7 @@ export default function App() {
     setEmotion(null);
 
     try {
-      const response = await fetch('http://localhost:3000/api/analyze', {
+      const response = await fetch('https://emotion-classifier-zszt.onrender.com/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
