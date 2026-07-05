@@ -10,8 +10,8 @@ app.use(express.json());
 app.post('/api/analyze', (req, res) => {
     const textToAnalyze = req.body.text;
 
-    // This is exactly like typing `python predict.py "I am happy"` in the terminal
-    const pythonScript = spawn('python', ['predict.py', textToAnalyze]);
+    // This is exactly like typing `python3 predict.py "I am happy"` in the terminal
+    const pythonScript = spawn('python3', ['predict.py', textToAnalyze]);
 
     // When Python prints the answer, capture it and send it to the frontend
     pythonScript.stdout.on('data', (data) => {
