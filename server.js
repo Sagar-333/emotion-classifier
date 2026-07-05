@@ -9,20 +9,23 @@ app.use(express.json());
 // The API Endpoint
 app.post('/api/analyze', (req, res) => {
     const textToAnalyze = req.body.text;
-
-    // This is exactly like typing `python3 predict.py "I am happy"` in the terminal
     const pythonScript = spawn('python3', ['predict.py', textToAnalyze]);
 
-    // When Python prints the answer, capture it and send it to the frontend
+    let result = '';
+
     pythonScript.stdout.on('data', (data) => {
-        const emotion = data.toString().trim();
-        res.json({ text: textToAnalyze, predicted_emotion: emotion });
+        result += data.toString();
     });
 
-    // If Python crashes, catch the error
     pythonScript.stderr.on('data', (data) => {
-        console.error(`Python Error: ${data}`);
-        res.status(500).json({ error: "Failed to analyze text" });
+        console.error(`Python stderr (may just be a warning): ${data}`);
+    });
+
+    pythonScript.on('close', (code) => {
+        if (code !== 0) {
+            return res.status(500).json({ error: "Failed to analyze text" });
+        }
+        res.json({ text: textToAnalyze, predicted_emotion: result.trim() });
     });
 });
 
